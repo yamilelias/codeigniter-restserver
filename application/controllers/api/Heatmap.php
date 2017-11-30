@@ -59,8 +59,14 @@ class Heatmap extends REST_Controller {
             // Check if the users data store contains users (in case the database result returns NULL)
             if ($heatmap)
             {
-                // Set the response and exit
-                $this->response($heatmap, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+                // Fix for returning JSONP
+                $query = str_replace('callback=', '', $_SERVER['QUERY_STRING']); // Delete callback in query
+                $callback = explode('&', $query)[0]; // Get only the first callback
+                echo $callback . '(' . json_encode($heatmap) . ')';
+                return;
+
+                // Normal return (JSON format)
+//                $this->response($heatmap, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
             }
             else
             {
